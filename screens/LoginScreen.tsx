@@ -5,10 +5,8 @@ import {
   GoogleAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
 import React, { useState } from "react";
 import { ActivityIndicator, Button, StyleSheet, View } from "react-native";
-import { db } from "../App";
 import { useAuth } from "../hooks/useAuth";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -45,20 +43,6 @@ export default function LoginScreen() {
       signIn(response);
     }
   }, [response]);
-
-  const handleAddToFirestore = async () => {
-    console.log(db);
-    try {
-      const docRef = await addDoc(collection(db, "users"), {
-        first: "Ada",
-        last: "Lovelace",
-        born: 1815,
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.log("Error adding document: ", e);
-    }
-  };
 
   const handleButton = async () => {
     console.log(await getAuthToken());

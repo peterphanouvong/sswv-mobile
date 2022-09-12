@@ -1,6 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "./hooks/useAuth";
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
@@ -8,6 +11,7 @@ import Navigation from "./navigation";
 
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import React from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC3ULRmVVRjFgndhKEsrW2Y_JdPKCFjlXs",
@@ -31,12 +35,17 @@ export default function App() {
     return null;
   } else {
     return (
-      <SafeAreaProvider>
-        <AuthProvider>
-          <Navigation colorScheme={colorScheme} />
-        </AuthProvider>
-        <StatusBar />
-      </SafeAreaProvider>
+      <>
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider {...eva} theme={eva[colorScheme]}>
+          <SafeAreaProvider>
+            <AuthProvider>
+              <Navigation colorScheme={colorScheme} />
+            </AuthProvider>
+            <StatusBar />
+          </SafeAreaProvider>
+        </ApplicationProvider>
+      </>
     );
   }
 }

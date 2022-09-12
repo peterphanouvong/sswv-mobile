@@ -12,6 +12,7 @@ import {
   DarkTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
 import * as React from "react";
 import {
   ActivityIndicator,
@@ -27,6 +28,7 @@ import useColorScheme from "../hooks/useColorScheme";
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ModalScreen from "../screens/ModalScreen";
+import MyProfileProfileScreen from "../screens/MyProfileProfileScreen";
 import MyProfileScreen from "../screens/MyProfileScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import TabOneScreen from "../screens/TabOneScreen";
@@ -109,7 +111,11 @@ function RootNavigator() {
             component={BottomTabNavigator}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="MyProfile" component={MyProfileScreen} />
+          <Stack.Screen
+            name="MyProfileProfile"
+            component={MyProfileProfileScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="NotFound"
             component={NotFoundScreen}
@@ -130,6 +136,16 @@ function RootNavigator() {
   );
 }
 
+const BottomTabBar = ({ navigation, state }: any) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={(index) => navigation.navigate(state.routeNames[index])}
+  >
+    <BottomNavigationTab title="Home" />
+    <BottomNavigationTab title="Profile" />
+  </BottomNavigation>
+);
+
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
@@ -144,6 +160,7 @@ function BottomTabNavigator() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}
+      tabBar={(props) => <BottomTabBar {...props} />}
     >
       <BottomTab.Screen
         name="Home"
@@ -151,22 +168,17 @@ function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
           title: "Home",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-          headerTitle: "Home",
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("MyProfile")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name="user-circle-o"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
+          headerShown: false,
+        })}
+      />
+
+      <BottomTab.Screen
+        name="MyProfile"
+        component={MyProfileScreen}
+        options={({ navigation }: RootTabScreenProps<"MyProfile">) => ({
+          title: "MyProfile",
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          headerShown: false,
         })}
       />
 
@@ -193,6 +205,7 @@ function BottomTabNavigator() {
           ),
         })}
       />
+
       <BottomTab.Screen
         name="TabTwo"
         component={TabTwoScreen}
